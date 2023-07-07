@@ -1,0 +1,2 @@
+C:\scripts\CalculationMiniGamesReact\CalculationMiniGames\obj\Debug\calculationminigames.esproj.SuggestedBindingRedirects.cache
+C:\scripts\CalculationMiniGamesReact\CalculationMiniGames\obj\Debug\calculationminigames.esproj.CoreCompileInputs.cache

@@ -1,0 +1,114 @@
+/* CalculationGame.css */
+.progressBarContainer {
+    border: 1px solid #ccc;
+    width: 30%;
+    margin: 5px,5px,25px,15px;
+    margin: 0 auto; /* This will center the progress bar */
+    border-radius: 5px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.progressBar {
+    height: 40px;
+    border-radius: 2px;
+    transition: width 1s linear;
+    background: linear-gradient(to bottom, #27ae60, #2ecc71, #27ae60);
+}
+
+/* Hover effect */
+.progressBarContainer:hover {
+    transition: background 0.3s, box-shadow 0.3s;
+    box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Styles for the Start game button */
+.start-game-button {
+    background: linear-gradient(to right, #8e44ad, #3498db);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Styles for the disabled button */
+.start-game-button:disabled {
+    background: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* Hover effect */
+.start-game-button:not(:disabled):hover {
+    background: linear-gradient(to right, #3498db, #8e44ad);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for the Stop game button */
+.stop-game-button {
+    background: linear-gradient(to right, #c0392b, #e74c3c);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Hover effect for the Stop game button */
+.stop-game-button:hover {
+    background: linear-gradient(to right, #e74c3c, #c0392b);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+}
+
+.input-textbox {
+    font-size: 1.2em; /* Increased font size */
+    padding: 10px; /* Padding around text */
+    border: 2px solid #ccc;
+    border-radius: 4px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background */
+    width: 300px; /* Set width */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a box shadow */
+}
+
+/* Style for when the input box is focused */
+.input-textbox:focus {
+    border-color: #3a8d40; /* Change border color */
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); /* Enhance box shadow */
+    outline: none; /* Remove default outline */
+}
+
+/* Styles for the Submit button */
+.submit-button {
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 14px 2px;
+    cursor: pointer;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Hover effect for the Submit button */
+.submit-button:hover {
+    background: linear-gradient(to right, #27ae60, #2ecc71);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+}
