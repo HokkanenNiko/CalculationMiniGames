@@ -87,7 +87,8 @@ const CalculationGame = () => {
             clearInterval(timer);
             clearTimeout(timeout);
         };
-    }, [isPlaying, question]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isPlaying, question, timeLimit]);
 
     const checkAnswer = (userAnswer, operation, number1, number2) => {
         let correctAnswer;
