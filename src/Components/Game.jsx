@@ -10,12 +10,24 @@ function Game() {
         multiplication: true,
         division: false
     });
+    const [factors, setFactors] = useState({
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true,
+        "8": true,
+        "9": true
+    });
     const [availableTime, setAvailableTime] = useState(15);
     const [numberOfDigitsInCalculation, setNumberOfDigitsInCalculation] = useState(1);
     const [optionsVisible, setOptionsVisible] = useState(true);
 
     return (
-        <GameOptionsContext.Provider value={{ operators, setOperators, availableTime, setAvailableTime, numberOfDigitsInCalculation, setNumberOfDigitsInCalculation, setOptionsVisible }}>
+        <GameOptionsContext.Provider value={{ operators, setOperators, availableTime, setAvailableTime, numberOfDigitsInCalculation, setNumberOfDigitsInCalculation, setOptionsVisible, factors, setFactors }}>
 
             <div>
                 {optionsVisible ? (
@@ -54,8 +66,89 @@ function Game() {
                 />
                 Division
             </label>
-                <br />
-
+                        <br />
+                        <p>Use following numbers as calculation factors:</p>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[0]}
+                                onChange={(e) => { setFactors({ ...factors, 0: e.target.checked }); }}
+                            />
+                            0
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[1]}
+                                onChange={(e) => { setFactors({ ...factors, 1: e.target.checked }); }}
+                            />
+                            1
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[2]}
+                                onChange={(e) => { setFactors({ ...factors, 2: e.target.checked }); }}
+                            />
+                            2
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[3]}
+                                onChange={(e) => { setFactors({ ...factors, 3: e.target.checked }); }}
+                            />
+                            3
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[4]}
+                                onChange={(e) => { setFactors({ ...factors, 4: e.target.checked }); }}
+                            />
+                            4
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[5]}
+                                onChange={(e) => { setFactors({ ...factors, 5: e.target.checked }); }}
+                            />
+                            5
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[6]}
+                                onChange={(e) => { setFactors({ ...factors, 6: e.target.checked }); }}
+                            />
+                            6
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[7]}
+                                onChange={(e) => { setFactors({ ...factors, 7: e.target.checked }); }}
+                            />
+                            7
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[8]}
+                                onChange={(e) => { setFactors({ ...factors, 8: e.target.checked }); }}
+                            />
+                            8
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={factors[9]}
+                                onChange={(e) => { setFactors({ ...factors, 9: e.target.checked }); }}
+                            />
+                            9
+                        </label>
+                <br/>
             <label>
                 Time (seconds):
                 <input

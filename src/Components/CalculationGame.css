@@ -11,7 +11,7 @@
 .progressBar {
     height: 40px;
     border-radius: 2px;
-    transition: width 1s linear;
+    transition: width 0.2s linear;
     background: linear-gradient(to bottom, #27ae60, #2ecc71, #27ae60);
 }
 
@@ -79,6 +79,7 @@
     border: 2px solid #ccc;
     border-radius: 4px; /* Rounded corners */
     background-color: #f9f9f9; /* Light background */
+    transition: background-color 0.5s; /* adds a smooth transition */
     width: 300px; /* Set width */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a box shadow */
 }

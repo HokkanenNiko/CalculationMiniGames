@@ -3,26 +3,36 @@ import './CalculationGame.css'; // Import the CSS file
 import GameHistory from './GameHistory'; // Import the GameHistory component
 import GameInfo from './GameInfo'; // Import the GameInfo component
 import GameOptionsContext from './GameOptionsContext';
+import { animated, useSpring } from '@react-spring/web'
 
-function generateRandomNumber(maxDigits) {
-    const maxNumber = Math.pow(10, maxDigits) - 1;
-    return Math.floor(Math.random() * maxNumber) + 1;
+function generateRandomNumber(maxDigits, activeFactors) {
+
+    let digits = Math.floor(Math.random() * maxDigits) + 1;
+
+    let chosenFactor = "";
+    while (chosenFactor.length < digits) {
+        chosenFactor += activeFactors[Math.floor(Math.random() * activeFactors.length)];
+    }
+    return Number(chosenFactor);
 }
 
-const generateQuestion = (operators, numberOfDigitsInCalculation) => {
+const generateQuestion = (operators, numberOfDigitsInCalculation, factors) => {
     const activeOperators = Object.keys(operators).filter(key => operators[key] === true);
     const activeOperatorSymbols = activeOperators.map(operatorKey => operatorSymbols[operatorKey]);
     const numberOfDigitsTarget = Math.floor(Math.random() * 2) + 1;
 
+    const activeFactors = Object.keys(factors).filter(key => factors[key] === true);
+
+
     let firstRandomNumber = 0;
     let secondRandomNumber = 0;
     if (numberOfDigitsTarget === 1) {
-        firstRandomNumber = generateRandomNumber(numberOfDigitsInCalculation);
-        secondRandomNumber = generateRandomNumber(1);
+        firstRandomNumber = generateRandomNumber(numberOfDigitsInCalculation, activeFactors);
+        secondRandomNumber = generateRandomNumber(numberOfDigitsInCalculation, activeFactors);
     }
     else {
-        firstRandomNumber = generateRandomNumber(1);
-        secondRandomNumber = generateRandomNumber(numberOfDigitsInCalculation);
+        firstRandomNumber = generateRandomNumber(numberOfDigitsInCalculation, activeFactors);
+        secondRandomNumber = generateRandomNumber(numberOfDigitsInCalculation, activeFactors);
     }
     const a = firstRandomNumber;
     const b = secondRandomNumber;
@@ -30,7 +40,6 @@ const generateQuestion = (operators, numberOfDigitsInCalculation) => {
     let chosenOperator = activeOperatorSymbols[Math.floor(Math.random() * activeOperatorSymbols.length)];
     const question = a + chosenOperator + b;
     const questionPrompt = "What is: " + question + "?";
-    console.log(questionPrompt);
     let answer;
     switch (chosenOperator) {
         case '+':
@@ -59,7 +68,7 @@ const operatorSymbols = {
 };
 
 const CalculationGame = () => {
-    const { operators, availableTime, numberOfDigitsInCalculation, setOptionsVisible } = useContext(GameOptionsContext);
+    const {operators, availableTime, numberOfDigitsInCalculation, setOptionsVisible, factors } = useContext(GameOptionsContext);
     const [question, setQuestion] = useState(null);
     const [answer, setAnswer] = useState('');
     const [startTime, setStartTime] = useState(null);
@@ -70,6 +79,18 @@ const CalculationGame = () => {
     const [gameHistory, setGameHistory] = useState([]);
     const [questionsAnsweredCorrectly, setQuestionsAnsweredCorrectly] = useState(0);
     const [totalTime, setTotalTime] = useState(0);
+    const [isCorrect, setIsCorrect] = useState(true);
+    const [buttonText, setButtonText] = useState("Submit");
+
+
+    const btnSpring = useSpring({
+        transform: isCorrect ? 'scale(1.2)' : 'scale(1)',
+        config: {
+            tension: 200,
+            friction: 10,
+        },
+        
+    });
 
     useEffect(() => {
         let timer;
@@ -92,7 +113,9 @@ const CalculationGame = () => {
 
     const checkAnswer = (userAnswer, operation, number1, number2) => {
         let correctAnswer;
-
+        if (userAnswer === '') {
+            return false;
+        }
         switch (operation) {
             case '+':
                 correctAnswer = Math.round(number1 + number2);
@@ -117,21 +140,19 @@ const CalculationGame = () => {
         }
 
         const timeTaken = Date.now() - startTime;
-        console.log("User answer:", userAnswer, " correct answer:", correctAnswer);
         if (userAnswer === correctAnswer) {
             const pointsEarned = Math.max(10 - timeTaken / 1000, 1);
             setScore(score + pointsEarned);
             setQuestionsAnsweredCorrectly(questionsAnsweredCorrectly + 1);
             return true;
         } else {
-            setScore(score - 1);
             return false;
         }
     };
 
 
     const startGame = () => {
-        const question = generateQuestion(operators, numberOfDigitsInCalculation);
+        const question = generateQuestion(operators, numberOfDigitsInCalculation, factors);
         setTimeLimit(availableTime);
         setQuestion(question);
         setIsPlaying(true);
@@ -146,8 +167,6 @@ const CalculationGame = () => {
     const increaseTotalTime = () => {
         const timeTaken = Date.now() - startTime;
         setTotalTime(totalTime + timeTaken);
-        console.log("totaltime:", totalTime)
-
     }
 
     const userStopGameAction = () => {
@@ -169,10 +188,17 @@ const CalculationGame = () => {
             increaseTotalTime();
 
             if (elapsedTime < timeLimit) {
-
                 // Validate the answer and calculate score
                 if (!checkAnswer(answer, question.operator, question.a, question.b)) {
-                stopGame();
+                    stopGame();
+                }
+                else {
+                    setIsCorrect(true);
+                    setButtonText("Correct!");
+                    setTimeout(() => setButtonText("Submit"), 1000);
+                    setTimeout(() => {
+                        setIsCorrect(false);
+                    }, 200);
                 }
             }
             else {
@@ -180,7 +206,7 @@ const CalculationGame = () => {
             }
 
             // Generate new question and reset timer
-            setQuestion(generateQuestion(operators, numberOfDigitsInCalculation));
+            setQuestion(generateQuestion(operators, numberOfDigitsInCalculation, factors));
             setStartTime(Date.now());
             setElapsedTime(0);
             setAnswer('');
@@ -211,8 +237,10 @@ const CalculationGame = () => {
                             }
                         }} 
                     />
-                    <br />
-                    <button className="submit-button" onClick={handleSubmit}>Submit</button>
+                        <br />
+                        <animated.button style={btnSpring} className="submit-button" onClick={handleSubmit}>
+                            {buttonText}
+                        </animated.button>
                     <br />
                         <button className="stop-game-button" onClick={userStopGameAction}>Stop Game</button>
                 </div>
