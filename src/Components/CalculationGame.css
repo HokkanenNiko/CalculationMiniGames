@@ -2,6 +2,8 @@
 .progressBarContainer {
     border: 1px solid #ccc;
     width: 30%;
+    position: relative;
+    height: 40px;
     margin: 5px,5px,25px,15px;
     margin: 0 auto; /* This will center the progress bar */
     border-radius: 5px;
@@ -11,8 +13,18 @@
 .progressBar {
     height: 40px;
     border-radius: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
     transition: width 0.2s linear;
     background: linear-gradient(to bottom, #27ae60, #2ecc71, #27ae60);
+}
+
+.child {
+    position: absolute;
+    font-weight: bold;
+    top: 30%;
+    left: 50%;
 }
 
 /* Hover effect */

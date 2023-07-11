@@ -4,6 +4,7 @@ import GameHistory from './GameHistory'; // Import the GameHistory component
 import GameInfo from './GameInfo'; // Import the GameInfo component
 import GameOptionsContext from './GameOptionsContext';
 import { animated, useSpring } from '@react-spring/web'
+import GameResults from './GameResults';
 
 function generateRandomNumber(maxDigits, activeFactors) {
 
@@ -14,6 +15,21 @@ function generateRandomNumber(maxDigits, activeFactors) {
         chosenFactor += activeFactors[Math.floor(Math.random() * activeFactors.length)];
     }
     return Number(chosenFactor);
+}
+
+function getOperationMultiplier(operation) {
+    switch (operation) {
+        case '+':
+            return 1;
+        case '-':
+            return 1.25;
+        case '*':
+            return 2;
+        case '/':
+            return 2;
+        default:
+            break;
+    }
 }
 
 const generateQuestion = (operators, numberOfDigitsInCalculation, factors) => {
@@ -81,7 +97,7 @@ const CalculationGame = () => {
     const [totalTime, setTotalTime] = useState(0);
     const [isCorrect, setIsCorrect] = useState(true);
     const [buttonText, setButtonText] = useState("Submit");
-
+    const [isShowingGameResult, setIsShowingGameResult] = useState(false);
 
     const btnSpring = useSpring({
         transform: isCorrect ? 'scale(1.2)' : 'scale(1)',
@@ -141,7 +157,10 @@ const CalculationGame = () => {
 
         const timeTaken = Date.now() - startTime;
         if (userAnswer === correctAnswer) {
-            const pointsEarned = Math.max(10 - timeTaken / 1000, 1);
+            let numberLengthInCalculation = number1.toString().length + number2.toString().length;
+            let operationMultiplier = getOperationMultiplier(operation);
+
+            const pointsEarned = Math.max((10 - (timeTaken / 1000)) * operationMultiplier * numberLengthInCalculation, 1);
             setScore(score + pointsEarned);
             setQuestionsAnsweredCorrectly(questionsAnsweredCorrectly + 1);
             return true;
@@ -174,12 +193,17 @@ const CalculationGame = () => {
         stopGame();
     };
 
+    const continueFromResults = () => {
+        setIsShowingGameResult(false);
+        setOptionsVisible(true);
+    };
+
     const stopGame = () => {
         setIsPlaying(false);
-        setOptionsVisible(true);
+        setIsShowingGameResult(true);
         setGameHistory([
             ...gameHistory,
-            { score: score, questions: questionsAnsweredCorrectly, time: elapsedTime, totalTime: totalTime, correctAnswer: question.answer, lastQuestion: question.questionPrompt, lastAnswer: answer }
+            { score: score, questions: questionsAnsweredCorrectly, time: elapsedTime, totalTime: totalTime, correctAnswer: question.answer, lastQuestion: question.questionPrompt, lastAnswer: answer, gameNumber: gameHistory.length + 1 }
         ]);
     };
 
@@ -219,33 +243,47 @@ const CalculationGame = () => {
 
     return (
         <div>
-            {!isPlaying ? (
-
+            {!isPlaying && !isShowingGameResult ? (
                 <button className="start-game-button" disabled={!isAnyOperatorActive || numberOfDigitsInCalculation === '0'} onClick={startGame}>Start Game</button>
-            ) : (
+            ) : (<div />)}
+            {isPlaying ? (
                 <div>
-                        <GameInfo score={score} timeRemaining={timeRemainingInfo} progressBarWidth={progressBarWidth} />
-                        <div className="qustion-prompt">{question.questionPrompt}</div>
+                    <GameInfo score={score} timeRemaining={timeRemainingInfo} progressBarWidth={progressBarWidth} />
+                    <div className="qustion-prompt">{question.questionPrompt}</div>
                     <input
                         className="input-textbox"
                         type="number"
                         value={answer}
-                            onChange={(e) => setAnswer(e.target.value)}
-                            onKeyDown={(event) => {
+                        onChange={(e) => setAnswer(e.target.value)}
+                        onKeyDown={(event) => {
                             if (event.key === 'Enter') {
                                 handleSubmit();
                             }
-                        }} 
+                        }}
                     />
-                        <br />
-                        <animated.button style={btnSpring} className="submit-button" onClick={handleSubmit}>
-                            {buttonText}
-                        </animated.button>
                     <br />
-                        <button className="stop-game-button" onClick={userStopGameAction}>Stop Game</button>
+                    <animated.button style={btnSpring} className="submit-button" onClick={handleSubmit}>
+                        {buttonText}
+                    </animated.button>
+                    <br />
+                    <button className="stop-game-button" onClick={userStopGameAction}>End Game</button>
                 </div>
-            )}
-            {gameHistory.length > 0 && !isPlaying && <GameHistory history={gameHistory} />}
+            ) : (<div />) }
+            {isShowingGameResult ?
+                (<div >
+                    <GameResults
+                        lastQuestion={gameHistory[gameHistory.length - 1].lastQuestion}
+                        correctAnswer={gameHistory[gameHistory.length - 1].correctAnswer }
+                        lastAnswer={gameHistory[gameHistory.length - 1].lastAnswer}
+                        score={gameHistory[gameHistory.length - 1].score}
+                    />
+                    <animated.button style={btnSpring} className="submit-button" onClick={continueFromResults}>
+                        Continue
+                    </animated.button>
+                </div>)
+                :
+                (<div/>)}
+            {gameHistory.length > 0 && !isShowingGameResult && !isPlaying && <GameHistory history={gameHistory} />}
         </div>
     );
 };

@@ -4,12 +4,12 @@ function GameInfo({ score, timeRemaining, progressBarWidth }) {
     return (
         <div>
             <p>Score: {score}</p>
-            <p>Time Remaining: {timeRemaining} seconds</p>
             <div className="progressBarContainer">
                 <div
                     className="progressBar"
-                    style={{ width: `${progressBarWidth}%` }}
-                ></div>
+                    style={{ width: `${progressBarWidth}%` }}>
+                </div>
+                <div className="child">{timeRemaining}</div>
             </div>
 
         </div>
