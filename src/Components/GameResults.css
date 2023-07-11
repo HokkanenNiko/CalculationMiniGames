@@ -1,0 +1,26 @@
+.game-results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .game-results-table th, .game-results-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .game-results-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .game-results-table tr:hover {
+        background-color: #ddd;
+    }
+
+    .game-results-table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4caf50;
+        color: white;
+    }
